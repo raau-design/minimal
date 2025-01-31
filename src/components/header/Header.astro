@@ -1,0 +1,64 @@
+---
+import TabNext from "./Tab.astro";
+import Drawer from "./drawer.svelte";
+import { Separator } from "$lib/components/ui/separator";
+import ToggleDarkMode from "./toggleDarkMode.svelte";
+
+function handleSeparatorChange(event: CustomEvent<{ show: boolean }>) {
+    showSeparator = event.detail.show;
+}
+
+let showSeparator = false;
+---
+
+<nav
+    id="navbar"
+    class="flex flex-col sticky overflow-hidden w-full items-center top-0 backdrop-blur-lg z-40 antialiased dark:border-0"
+    on:separator-change={handleSeparatorChange}
+>
+    <div class="w-full">
+        <div class="mx-auto px-2 sm:px-6 lg:px-8 max-w-screen-2xl">
+            <div class="flex h-16 items-center">
+                <div
+                    class="absolute inset-y-0 left-0 flex ml-2 items-center sm:hidden"
+                >
+                    <Drawer client:idle>Open</Drawer>
+                </div>
+                <div
+                    class="flex flex-1 items-center md:justify-left md:justify-left"
+                >
+                    <div
+                        class="sm:flex items-center sm:pr-8 pr-0 mx-auto sm:mx-0"
+                    >
+                        <a
+                            href="/"
+                            class="flex justify-center items-center text-xl"
+                        >
+                            Home
+                        </a>
+                    </div>
+                    <TabNext />
+                </div>
+
+                <ToggleDarkMode client:load />
+            </div>
+        </div>
+    </div>
+    {showSeparator && <Separator />}
+</nav>
+
+<script>
+    const navbar = document.getElementById("navbar");
+    if (navbar) {
+        window.addEventListener("scroll", () => {
+            const show = window.scrollY > 0;
+            navbar.querySelector("div")?.classList.toggle("border-b", show);
+
+            navbar.dispatchEvent(
+                new CustomEvent("separator-change", {
+                    detail: { show },
+                }),
+            );
+        });
+    }
+</script>

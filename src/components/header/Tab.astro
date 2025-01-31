@@ -1,0 +1,102 @@
+---
+export const prerender = false;
+import HeaderLink from "./HeaderLink.astro";
+
+let mainNavPages = [
+    {
+        name: "Page 1",
+        href: "/demo/masivo",
+    },
+    {
+        name: "Page 2",
+        href: "/demo/plant",
+    },
+    {
+        name: "Page 3",
+        href: "/demo/unicorn",
+    },
+];
+---
+
+<div>
+    <nav
+        id="nav-effect"
+        aria-label="Global"
+        class="hidden items-center justify-center sm:block lg:w-auto"
+    >
+        <ul class="flex items-center gap-4">
+            {
+                mainNavPages.map((page) => (
+                    <li>
+                        <HeaderLink href={page.href}>{page.name}</HeaderLink>
+                    </li>
+                ))
+            }
+        </ul>
+    </nav>
+
+    <div
+        id="list-item-backdrop"
+        class:list={`absolute bg-[#ebebeb] dark:bg-[#1f1f1f] rounded-xl px-4 py-3 translate-x-[var(--left)] translate-y-[var(--top)]
+      left-0 top-0
+      w-[var(--width)] h-[var(--height)]
+      transition-all duration-500
+      ease-in-out opacity-0 -z-10`}
+    >
+    </div>
+</div>
+
+<script is:inline data-astro-rerun>
+    document.addEventListener("astro:page-load", () => {
+        const listItem = document.querySelectorAll("#nav-effect li a");
+        const menuBackDrop = document.querySelector("#list-item-backdrop");
+
+        listItem.forEach((item) => {
+            if (item.classList.contains("active")) {
+                const { left, top, width, height } =
+                    item.getBoundingClientRect();
+                menuBackDrop.style.setProperty("--left", `${left}px`);
+                menuBackDrop.style.setProperty("--top", `${top}px`);
+                menuBackDrop.style.setProperty("--width", `${width}px`);
+                menuBackDrop.style.setProperty("--height", `${height}px`);
+                return;
+            }
+
+            item.addEventListener("mouseenter", () => {
+                const { left, top, width, height } =
+                    item.getBoundingClientRect();
+
+                menuBackDrop.style.setProperty("--left", `${left}px`);
+                menuBackDrop.style.setProperty("--top", `${top}px`);
+                menuBackDrop.style.setProperty("--width", `${width}px`);
+                menuBackDrop.style.setProperty("--height", `${height}px`);
+
+                menuBackDrop.style.visibility = "visible";
+                menuBackDrop.style.opacity = "1";
+            });
+            item.addEventListener("mouseleave", () => {
+                menuBackDrop.style.opacity = "0";
+                menuBackDrop.style.visibility = "hidden";
+            });
+        });
+
+        const header = document.querySelector("#nav-effect");
+        window.addEventListener("scroll", () => {
+            let currentScrollPos = window.scrollY;
+            if (currentScrollPos - header.offsetHeight > 0) {
+                header.classList.add("hide");
+            } else {
+                header.classList.remove("hide");
+            }
+        });
+    });
+</script>
+
+<style>
+    header {
+        transition: transform 0.5s ease;
+    }
+    header.hide {
+        transform: translateY(-100%);
+    }
+</style>
