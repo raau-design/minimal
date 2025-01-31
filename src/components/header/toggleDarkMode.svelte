@@ -2,8 +2,8 @@
     import { resetMode, setMode } from "mode-watcher";
     import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
     import { buttonVariants } from "$lib/components/ui/button/index.js";
-    import SunMoon from "lucide-svelte/icons/sun-moon";
-    // import { SunMoon } from "lucide-svelte";
+    import SunMoon from "lucide-svelte/icons/sun-moon"; // Astro fast
+    // import { SunMoon } from "lucide-svelte";  // Astro slow
 </script>
 
 <DropdownMenu.Root>
