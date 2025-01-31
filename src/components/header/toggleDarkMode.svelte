@@ -2,19 +2,14 @@
     import { resetMode, setMode } from "mode-watcher";
     import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
     import { buttonVariants } from "$lib/components/ui/button/index.js";
+    import SunMoon from "lucide-svelte/icons/sun-moon";
     // import { SunMoon } from "lucide-svelte";
-
-    let lucide = $state(false);
 </script>
 
 <DropdownMenu.Root>
     <DropdownMenu.Trigger class={buttonVariants({ variant: "outline" })}>
         <span class="px-2">
-            {#if lucide}
-                <!-- <SunMoon /> -->
-            {:else}
-                Theme
-            {/if}
+            <SunMoon />
         </span>
     </DropdownMenu.Trigger>
     <DropdownMenu.Content align="end">
